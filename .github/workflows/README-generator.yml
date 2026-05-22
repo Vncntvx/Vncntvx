@@ -4,7 +4,7 @@
 name: README Generator
 
 # 触发条件：当 Metrics Calendar 工作流完成时或手动触发
-on:
+于:
   workflow_run:
     workflows: ["Metrics Calendar"] # 依赖于 Metrics Calendar 工作流
     types:
@@ -57,7 +57,7 @@ jobs:
 
           # RSS 插件
           plugin_rss: yes
-          plugin_rss_source: https://vncntvx.github.io/feed.xml
+          plugin_rss_source: https://blog.wenjiexu.site/en/rss.xml
           plugin_rss_limit: 3
 
           # 习惯统计插件
