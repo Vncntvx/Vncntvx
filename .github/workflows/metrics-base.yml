@@ -3,10 +3,10 @@
 name: Metrics Base
 
 # 触发条件
-on:
-  schedule: [{ cron: "0 0 */2 * *" }]  # 每两天自动运行
+于:
+  schedule: [{ cron: "0 0 * * 1" }]  # 每周一 00:00 运行
   push: 
-    branches: ["master", "main"]
+    分支: ["master", "main"]
     paths-ignore:
       - 'README.md'  # 忽略README.md的更改
   workflow_dispatch:  # 允许手动触发
