@@ -1,0 +1,45 @@
+# 生成 Snake Animation GIF（贪吃蛇吃贡献图）
+name: Snake Animation
+
+on:
+  schedule: [{ cron: "0 0 * * 1" }]  # 每周一 00:00 运行
+  workflow_run:
+    workflows: ["Metrics Base"]  # 依赖于 Metrics Base 工作流
+    types:
+      - completed
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  generate-snake:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    environment:
+      name: production
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate snake SVG from contribution graph
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: Vncntvx
+          outputs: |
+            .cache/snake.svg
+            .cache/snake-dark.svg?palette=github-dark
+
+      - name: Commit and Push snake SVG if changed
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .cache/snake.svg .cache/snake-dark.svg
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update snake animation SVG [Skip GitHub Action]"
+            git pull --rebase origin main
+            git push
+          fi
