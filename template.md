@@ -11,40 +11,57 @@
 
 ## 📝 About Me
 
-- 🎓 **PhD Candidate** in Management Science and Engineering at [CASISD](http://www.casisd.cn/).
-- 🔍 Focused on **Risk Management**, exploring innovative strategies for risk assessment and management.
-- 📅 I joined GitHub on 15 Feb 2020, and since then, I’ve actively contributed to 14 repositories with a total of 171 commits.
-- 💡 Programming Enthusiast: **Python**, **Julia**, **JavaScript/TypeScript** and **Typst**.
+- 🎓 **PhD Candidate** in Management Science and Engineering at [Institutes of Science and Development, Chinese Academy of Sciences](http://www.casisd.cn/) ([CASISD](http://www.casisd.cn/)).
+- 🔍 Researching **risk assessment and governance for critical urban infrastructure**, focusing on risk characterization, composite risk measurement, and proactive decision-making under cascading, multi-hazard scenarios.
+- 💻 Building tools and contributing to open-source along the way.
 
-## 🛠️ Tech Stack
+<p align="center">
+<a href="https://wenjiexu.site"><img src="https://img.shields.io/badge/-Homepage-1E90FF?style=flat-square&logo=globe&logoColor=white"></a>
+<a href="https://blog.wenjiexu.site"><img src="https://img.shields.io/badge/-Blog-239DAD?style=flat-square&logo=rss&logoColor=white"></a>
+<a href="mailto:wenjie.xu.cn@outlook.com"><img src="https://img.shields.io/badge/-Email-0078D4?style=flat-square&logo=microsoft-outlook&logoColor=white"></a>
+<br>
+<img src="https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white">
+<img src="https://img.shields.io/badge/-Julia-9558B2?style=flat-square&logo=julia&logoColor=white">
+<img src="https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/-Typst-239DAD?style=flat-square&logo=typst&logoColor=white">
+<img src="https://img.shields.io/badge/-MATLAB-0076A8?style=flat-square&logo=mathworks&logoColor=white">
+<img src="https://img.shields.io/badge/-R-276DC3?style=flat-square&logo=r&logoColor=white">
+</p>
 
-<div align="center">
+---
 
-![Python](https://img.shields.io/badge/-Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Julia](https://img.shields.io/badge/-Julia-9558B2?style=for-the-badge&logo=julia&logoColor=white)
-![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Typst](https://img.shields.io/badge/-Typst-239DAD?style=for-the-badge&logo=typst&logoColor=white)
-![MATLAB](https://img.shields.io/badge/-MATLAB-0076A8?style=for-the-badge&logo=mathworks&logoColor=white)
-![R](https://img.shields.io/badge/-R-276DC3?style=for-the-badge&logo=r&logoColor=white)
-
-</div>
-
-## 📈 GitHub Stats
+## 📊 GitHub Activity
 
 ![metrics.base](https://raw.githubusercontent.com/Vncntvx/Vncntvx/main/.cache/metrics.base.svg)
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Vncntvx&layout=compact&hide=javascript,html,scss,css,ruby,shell,Tex,Powershell,)](https://github.com/Vncntvx/Vncntvx)
+![Languages](https://raw.githubusercontent.com/Vncntvx/Vncntvx/main/.cache/languages.svg)
 
-## 📊 Coding Activity
-
-![Isometric year calendar](https://raw.githubusercontent.com/Vncntvx/Vncntvx/main/.cache/metrics.plugin.isocalendar.fullyear.svg)
+![Snake animation](https://raw.githubusercontent.com/Vncntvx/Vncntvx/main/.cache/snake.svg)
 
 ## 📝 Latest Posts
 
-<%- await include(`partials/rss.ejs`) %>
+<%_ if (plugins.rss) { _%>
+**[🗼 RSS feed from <%= plugins.rss?.source %>](<%= plugins.rss?.link %>)**
+<%_ if (plugins.rss.error) { _%>
+<%= plugins.rss.error.message _%>
+<%_ } else if (plugins.rss.feed.length) { _%>
+<%_ for (const {title, link, date} of plugins.rss.feed) { _%>
+* [<%= title %>](<%= link %>)
+  * *Published on <%= f.date(new Date(date), {date:true}) %>*
+<%_ } _%>
+<%_ } else { _%>
+Empty RSS feed
+<%_ } _%>
+<%_ } _%>
 
 ---
+
+<div align="center">
+
+> *"Think more, speak less."*
+
+</div>
 
 <div align="right">
 

@@ -1,0 +1,118 @@
+# 生成所有 profile 资源：metrics SVG、snake animation、README
+name: Profile Generator
+
+on:
+  schedule: [{ cron: "0 0 * * 1" }]  # 每周一 00:00 运行
+  push:
+    branches: ["master", "main"]
+    paths-ignore:
+      - 'README.md'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  # 并行：生成 metrics.base.svg 和 languages.svg（metrics action 自带 git push）
+  generate-metrics:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    environment:
+      name: production
+    permissions:
+      contents: write
+    steps:
+      - name: Generate base metrics
+        uses: lowlighter/metrics@v3.20
+        with:
+          filename: .cache/metrics.base.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: header, activity, community, repositories, metadata
+          config_timezone: Asia/Shanghai
+          user: vncntvx
+          repositories_skipped: vncntvx.github.io, vncntvx
+
+      - name: Generate languages metrics
+        uses: lowlighter/metrics@v3.20
+        with:
+          filename: .cache/languages.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_languages: yes
+          plugin_languages_analysis_timeout: 15
+          plugin_languages_categories: markup, programming
+          plugin_languages_details: bytes-size, percentage
+          plugin_languages_ignored: html, css, scss, tex, less, dockerfile, makefile, qmake, lex, cgi
+          plugin_languages_limit: 8
+          config_timezone: Asia/Shanghai
+          user: vncntvx
+          repositories_skipped: vncntvx.github.io, vncntvx
+
+  # 并行：生成 snake animation（snk action 不自带 git push，需要手动 commit）
+  generate-snake:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    environment:
+      name: production
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate snake SVG from contribution graph
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: Vncntvx
+          outputs: |
+            .cache/snake.svg
+            .cache/snake-dark.svg?palette=github-dark
+
+      - name: Commit and Push snake SVG if changed
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .cache/snake.svg .cache/snake-dark.svg
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update snake animation SVG [Skip GitHub Action]"
+            git pull --rebase origin main
+            git push
+          fi
+
+  # 等前两步都完成后，生成 README（metrics markdown 模式自带 git push）
+  generate-readme:
+    runs-on: ubuntu-latest
+    needs: [generate-metrics, generate-snake]
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    environment:
+      name: production
+    permissions:
+      contents: write
+    steps:
+      - name: Generate README
+        uses: lowlighter/metrics@v3.20
+        with:
+          template: markdown
+          filename: README.md
+          markdown_cache: .cache
+          markdown: https://raw.githubusercontent.com/Vncntvx/Vncntvx/main/template.md
+          config_output: markdown
+          user: vncntvx
+          config_timezone: Asia/Shanghai
+
+          base: header, metadata, activity, community
+          repositories_skipped: vncntvx/vncntvx.github.io, vncntvx/vncntvx
+
+          plugin_languages: yes
+          plugin_languages_analysis_timeout: 15
+          plugin_languages_categories: markup, programming
+          plugin_languages_details: bytes-size, percentage
+          plugin_languages_ignored: html, css, scss, tex, less, dockerfile, makefile, qmake, lex, cgi
+          plugin_languages_limit: 8
+
+          plugin_rss: yes
+          plugin_rss_source: https://blog.wenjiexu.site/en/rss.xml
+          plugin_rss_limit: 3
+
+          token: ${{ secrets.METRICS_TOKEN }}
